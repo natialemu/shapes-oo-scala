@@ -11,5 +11,18 @@ case class Location(x: Int, y: Int, shape: Shape) extends Shape {
   require(shape != null, "null shape in location")
 }
 
+case class Ellipse(majorAxis: Int, minorAxis: Int) extends Shape{
+  require(majorAxis >= 0,"invalid value for major axis")
+  require(minorAxis >=0,"invalid value for the minor axis")
+}
+
+case class Circle(radius : Int) extends Shape{
+  require(radius >=0,"invalid value for the radius")
+}
+
+case class Group(shape1: Shape*) extends Shape{
+
+}
+
 // TODO add missing case classes (see test fixtures)
 // TODO must include validity checking for constructor arguments
