@@ -15,7 +15,19 @@ class TestBoundingBox extends FunSuite {
       assert(height === r.height)
     }
   }
+  def testMin(description: String, s: Shape, minx: Int, miny: Int, maxX: Int, maxY: Int)={
+    test(description){
+      assert(boundingBox.getMinx(s) === minx)
+      assert(boundingBox.getMiny(s) == miny)
+      assert(boundingBox.getMaxy(s) == maxY)
+      assert(boundingBox.getMaxx(s) == maxX)
 
+    }
+
+  }
+
+
+  testMin("test Min of group", basicGroup,-50,-30,50,40)
   // TODO comment these tests back in
 
   testBoundingBox("simple ellipse", simpleEllipse, -50, -30, 100, 60)

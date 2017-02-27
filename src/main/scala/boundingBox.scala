@@ -4,10 +4,7 @@ package edu.luc.cs.laufer.cs372.shapes
 
 object boundingBox {
   def apply(s: Shape): Location = s match {
-    case Location(x,y,shape)=> shape match{
-      case Rectangle(width,height) => Location(x,y,Rectangle(width,height))
-      case _=> apply(shape)
-    } // not yet implemented
+    case Location(x,y,shape)=> Location(x+apply(shape).x,y+apply(shape).y,apply(shape).shape)
     case Rectangle(width,height) => Location(0,0,Rectangle(width,height))
     case Ellipse(majorAxis,minorAxis)=>Location(-majorAxis,-minorAxis,Rectangle(majorAxis*2,minorAxis*2))
     case Circle(radius)=>Location(-radius,-radius,Rectangle(2*radius,2*radius))
@@ -17,7 +14,7 @@ object boundingBox {
   }
 
   def groupBoundingBox(group : Group): Location={
-  return Location(getMinx(group),getMiny(group),Rectangle(getMaxx(group)-getMinx(group),getMaxy(group)-getMinx(group)))
+  return Location(getMinx(group),getMiny(group),Rectangle(getMaxx(group)-getMinx(group),getMaxy(group)-getMiny(group)))
   }
 
   def getMinx(shape: Shape): Int= shape match{
@@ -59,7 +56,7 @@ object boundingBox {
     case Group(shape,shape2) => {
       val shapeRectangle = apply(shape).shape.asInstanceOf[Rectangle]
       val shape2Rectangle = apply(shape2).shape.asInstanceOf[Rectangle]
-      Math.min(apply(shape).y + shapeRectangle.height,apply(shape2).y +shape2Rectangle.height)
+      Math.max(apply(shape).y + shapeRectangle.height,apply(shape2).y +shape2Rectangle.height)
     }
     case Group(shape,shape2,shape3) => {
       List[Shape](shape,shape2,shape3).foldLeft{(0)}{case (minimum, next)=>
