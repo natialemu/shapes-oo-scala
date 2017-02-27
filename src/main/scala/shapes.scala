@@ -21,6 +21,7 @@ case class Circle(radius : Int) extends Shape{
 }
 
 case class Group(shape1: Shape*) extends Shape{
+  require(shape1 != null,"a group must be composed of shapes")
 
 }
 

@@ -21,9 +21,9 @@ class TestHeight extends FunSuite{
 
   testHeight("simple ellipse", simpleEllipse, 1)
   testHeight("simple rectangle", simpleRectangle, 1)
-  testHeight("simple location", simpleLocation, 1)
+  testHeight("simple location", simpleLocation, 2)
   testHeight("basic group", basicGroup, 2)
-  testHeight("simple group", simpleGroup, 2)
-  testHeight("complex group", complexGroup, 3)
+  testHeight("simple group", simpleGroup, 3)
+  testHeight("complex group", complexGroup, 6)
 
 }

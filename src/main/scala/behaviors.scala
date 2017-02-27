@@ -15,7 +15,10 @@ object behaviors {
     case Rectangle(width,height) => 1
     case Ellipse(majorAxis,minorAxis) => 1
     case Location(x,y,shape) => size(shape)
-    case Group(shapes: Seq[Shape]) => sum(shapes)
+    case Group(shape) => size(shape)
+    case Group(shape, shape1) => size(shape) + size(shape1)
+    case Group(shape, shape1, shape2) => size(shape) + size(shape1) + size(shape2)
+    case Group(shape: Seq[Shape]) => sum(shape)
   }
 
   def sum(shape: Seq[Shape]): Int ={
@@ -37,13 +40,16 @@ object behaviors {
     case Rectangle(width,height) => 1
     case Ellipse(majorAxis,minorAxis) => 1
     case Location(x,y,shape) => 1 + height(shape)
+    case Group(shape) => 1 + height(shape)
+    case Group(shape, shape1) => 1 + maxHeight(List[Shape](shape,shape1))
+    case Group(shape,shape1,shape2) => 1 + maxHeight(List[Shape](shape,shape1,shape2))
     case Group(shapes: Seq[Shape]) => 1 + maxHeight(shapes)
 
 
   }
-  def rescaleGroup(shape: Seq[Shape], factor: Int): Shape={
-     val newShapes = shape.foldLeft(Seq[Shape]())((r,c)=> r :: rescale(c,factor))
-    return Group(newShapes)
+  def rescaleGroup(shape: Seq[Shape], factor: Int, acc: List[Shape]): List[Shape] = shape match {
+    case Nil => acc.reverse
+    case n :: rest=> rescaleGroup(rest,factor,rescale(n,factor)::acc)
   }
 
   //how to rescale a shape:
@@ -56,8 +62,18 @@ object behaviors {
     case Circle(c)=> Circle(c*factor)
     case Rectangle(width,height) => new Rectangle(width*factor,height*factor)
     case Ellipse(majorAxis,minorAxis) => Ellipse(majorAxis*factor,minorAxis*factor)
-    case Location(x,y,shape) => Location(x*factor,y*factor,rescale(shape,factor))
-    case Group(shapes: Seq[Shape]) => rescaleGroup(shapes, factor) //Group(rescale(shape,factor),rescale(shape2,factor))
+    case Location(x,y,shape) => shape match {
+      case Circle(c) => Location(x,y,rescale(shape,factor))
+      case Rectangle(width,height) => Location(x - (width/2)*(factor-1),y - (height/2)*(factor-1),rescale(shape,factor))
+      case Ellipse(majorAxis,minorAxis)=> Location(x,y,rescale(shape,factor))
+      case Group(shape3) => Location(x,y,rescale(shape,factor))
+      case Group(shape3, shape1)=>Location(x,y,rescale(shape,factor))
+      case Group(shape3,shape1,shape2)=>Location(x,y,rescale(shape,factor))
+    }
+    case Group(shape) =>Group(rescale(shape,factor))
+    case Group(shape, shape1) => Group(rescaleGroup(Seq[Shape](shape,shape1),factor,List[Shape]()):_*)
+    case Group(shape, shape1, shape2) =>Group(rescaleGroup(Seq[Shape](shape,shape1,shape2),factor,List[Shape]()):_*)
+    case Group(shapes : Seq[Shape]) => Group(rescaleGroup(shapes, factor,List[Shape]()):_*) //Group(rescale(shape,factor),rescale(shape2,factor))
   }
 
 }

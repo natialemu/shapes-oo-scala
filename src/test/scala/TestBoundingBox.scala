@@ -1,9 +1,7 @@
-package edu.luc.cs.laufer.cs372.shapes
-
 import org.scalatest.FunSuite
 
-import TestFixtures._
-import edu.luc.cs.laufer.cs372.shapes.behaviors._
+import edu.luc.cs.laufer.cs372.shapes.TestFixtures._
+import edu.luc.cs.laufer.cs372.shapes._
 
 class TestBoundingBox extends FunSuite {
 
