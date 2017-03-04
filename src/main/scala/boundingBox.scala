@@ -8,9 +8,7 @@ object boundingBox {
     case Rectangle(width,height) => Location(0,0,Rectangle(width,height))
     case Ellipse(majorAxis,minorAxis)=>Location(-majorAxis,-minorAxis,Rectangle(majorAxis*2,minorAxis*2))
     case Circle(radius)=>Location(-radius,-radius,Rectangle(2*radius,2*radius))
-    case Group(shape,shape2) => groupBoundingBox(Group(shape,shape2))
-    case Group(shape) => groupBoundingBox(Group(shape))
-    case Group(shape,shape2,shape3) => groupBoundingBox(Group(shape,shape2,shape3))
+    case Group(shapes@_*) => groupBoundingBox(Group(shapes:_*))
   }
 
   def groupBoundingBox(group : Group): Location={
