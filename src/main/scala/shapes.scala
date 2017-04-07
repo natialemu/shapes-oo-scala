@@ -25,5 +25,6 @@ case class Group(shape1: Shape*) extends Shape{
 
 }
 
+
 // TODO add missing case classes (see test fixtures)
 // TODO must include validity checking for constructor arguments
